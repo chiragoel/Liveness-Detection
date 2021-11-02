@@ -263,21 +263,25 @@ def detect_and_display(model, rf_model, video_capture, face_detector, eye_detect
 
     return frame
 
-data = {'encodings': []}
 
-print("[LOG] Opening webcam ...")
-video_capture = cv2.VideoCapture(0)
+def main():
+    data = {'encodings': []}
 
-eyes_detected = defaultdict(str)
+    print("[LOG] Opening webcam ...")
+    video_capture = cv2.VideoCapture(0)
 
-prev_encoding = []
+    eyes_detected = defaultdict(str)
 
-while True:
+    prev_encoding = []
+
+    while True:
+
+      frame = detect_and_display(model, rf_model, video_capture, face_detector, eye_detector, open_eye_detector, left_eye_detector, right_eye_detector, data, eyes_detected, prev_encoding)
+      cv2.imshow("Eye-Blink LiveNet", frame)
+      if cv2.waitKey(1) & 0xFF == ord('q'):
+          break
+
+    video_capture.release()
+    cv2.destroyAllWindows()
     
-  frame = detect_and_display(model, rf_model, video_capture, face_detector, eye_detector, open_eye_detector, left_eye_detector, right_eye_detector, data, eyes_detected, prev_encoding)
-  cv2.imshow("Eye-Blink LiveNet", frame)
-  if cv2.waitKey(1) & 0xFF == ord('q'):
-      break
-        
-video_capture.release()
-cv2.destroyAllWindows()
+main()
